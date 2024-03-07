@@ -37,7 +37,7 @@
 		</figure>
 		<!-- / -->
 		<div class="flex justify-center space-x-2">
-			<a class="btn variant-filled" href="/theory-of-capital"> Learn now! </a>
+			<a class="btn variant-filled-primary" href="/theory-of-capital"> Learn now! </a>
 		</div>
 	</div>
 </div>
