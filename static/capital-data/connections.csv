@@ -1,0 +1,23 @@
+from,to,example
+economic,social,Paying for a tutor
+economic,objectified,Buying clothes
+economic,institutionalized,Paying tuition for a degree
+economic,embodied,NOT FOUND YET
+social,economic,Getting money from parents
+social,economic,Job referrals
+social,objectified,Getting gifts from friends
+social,institutionalized,Legacy admissions
+social,embodied,Learning from mentors
+objectified,economic,Selling your things
+objectified,social,Bonding with someone over clothing style
+objectified,institutionalized,Using your computer to help you get through school (possibly wrong?)
+objectified,embodied,Using your computer to learn (possibly wrong?)
+institutionalized,economic,Passing a resume check because of your degree
+institutionalized,social,Bonding with someone because of your credentials
+institutionalized,objectified,NOT FOUND YET
+institutionalized,embodied,NOT FOUND YET
+embodied,economic,Exceling in your job
+embodied,economic,Scholarships
+embodied,social,Getting along with others with your charisma
+embodied,objectified,NOT FOUND YET
+embodied,institutionalized,Getting a degree using your knowledge and skills
