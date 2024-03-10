@@ -1,16 +1,26 @@
 <script lang="ts">
-	import Card from './card.svelte';
+	import type { CardInfo } from './types';
+	import Card from './Card.svelte';
 	import Papa from 'papaparse';
 	import { onMount } from 'svelte';
-	import Arrow from './arrow.svelte';
 
 	// retreiving card info
-	// TODO: create type for card info
-	let cards: any[] = [];
+	// TODO: create type for and arrow info
+	// TODO: move this to server loading
+	let cards: CardInfo[] = [];
+	let arrows: any[] = [];
 	onMount(() => {
-		Papa.parse('/capital-data/definitions.csv', {
-			complete: function (results, file) {
+		Papa.parse<CardInfo>('/capital-data/definitions.csv', {
+			complete: function (results) {
 				cards = results.data;
+			},
+			download: true,
+			dynamicTyping: true,
+			header: true
+		});
+		Papa.parse('/capital-data/connections.csv', {
+			complete: function (results) {
+				arrows = results.data;
 			},
 			download: true,
 			dynamicTyping: true,
@@ -18,44 +28,64 @@
 		});
 	});
 
+	// Focus Mode is when a card is clicked and more details are shown
+	let focusedCardIndex: number = -1;
+	$: isFocusMode = focusedCardIndex !== -1;
+	function updateFocusMode(i: number) {
+		if (isFocusMode && focusedCardIndex != i) {
+			focusedCardIndex = i;
+		} else if (isFocusMode && focusedCardIndex == i) {
+			isFocusMode = false;
+		} else {
+			isFocusMode = true;
+			focusedCardIndex = i;
+		}
+	}
+
+	$: console.log(isFocusMode);
+
 	// calculating card position
 	const radiusPercent: number = 25;
-	function xPos(i: number) {
-		let percent = i / cards.length;
+	$: xPos = (i: number) => {
+		let percent;
+		if (isFocusMode && focusedCardIndex === i) {
+			return 50;
+		} else if (isFocusMode && i < focusedCardIndex) {
+			percent = i / (cards.length - 1);
+		} else if (isFocusMode && i > focusedCardIndex) {
+			percent = (i - 1) / (cards.length - 1);
+		} else {
+			percent = i / cards.length;
+		}
 		let angle = percent * 2 * Math.PI;
 		let x = Math.cos(angle);
 		x = x * radiusPercent + 50;
 		return x;
-	}
-	function yPos(i: number) {
+	};
+	$: yPos = (i: number) => {
 		let percent = i / cards.length;
+		if (isFocusMode && focusedCardIndex == i) {
+			return 50;
+		} else if (isFocusMode && i < focusedCardIndex) {
+			percent = i / (cards.length - 1);
+		} else if (isFocusMode && i > focusedCardIndex) {
+			percent = (i - 1) / (cards.length - 1);
+		} else {
+			percent = i / cards.length;
+		}
 		let angle = percent * 2 * Math.PI;
 		let y = Math.sin(angle);
 		y = y * radiusPercent + 50;
 		return y;
-	}
-
-	// Focus Mode is when a card is clicked and more details are shown
-	let isFocusMode: boolean = false;
-	let focusedCardId: string = '';
-	function updateFocusMode(id: string) {
-		if (isFocusMode && focusedCardId != id) {
-			focusedCardId = id;
-		} else if (isFocusMode && focusedCardId == id) {
-			isFocusMode = false;
-		} else {
-			isFocusMode = true;
-			focusedCardId = id;
-		}
-	}
+	};
 </script>
 
 {#each cards as card, i (card.id)}
 	<Card
 		{...card}
 		position={[xPos(i), yPos(i)]}
-		isFocus={isFocusMode && focusedCardId == card.id}
+		isFocus={isFocusMode && focusedCardIndex == i}
 		on:mouseover
-		on:click={() => updateFocusMode(card.id)}
+		on:click={() => updateFocusMode(i)}
 	/>
 {/each}
