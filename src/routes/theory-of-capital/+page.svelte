@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { CardInfo } from './types';
+	import type { CardInfo, ArrowInfo, Position } from './types';
 	import Card from './Card.svelte';
 	import Papa from 'papaparse';
 	import { onMount } from 'svelte';
@@ -8,20 +8,16 @@
 	// TODO: create type for and arrow info
 	// TODO: move this to server loading
 	let cards: CardInfo[] = [];
-	let arrows: any[] = [];
+	let arrows: ArrowInfo[] = [];
 	onMount(() => {
 		Papa.parse<CardInfo>('/capital-data/definitions.csv', {
-			complete: function (results) {
-				cards = results.data;
-			},
+			complete: (results) => (cards = results.data),
 			download: true,
 			dynamicTyping: true,
 			header: true
 		});
-		Papa.parse('/capital-data/connections.csv', {
-			complete: function (results) {
-				arrows = results.data;
-			},
+		Papa.parse<ArrowInfo>('/capital-data/connections.csv', {
+			complete: (results) => (arrows = results.data),
 			download: true,
 			dynamicTyping: true,
 			header: true
@@ -30,29 +26,27 @@
 
 	// Focus Mode is when a card is clicked and more details are shown
 	let focusedCardIndex: number = -1;
-	$: isFocusMode = focusedCardIndex !== -1;
+	$: isFocusingOnCard = focusedCardIndex !== -1;
 	function updateFocusMode(i: number) {
-		if (isFocusMode && focusedCardIndex != i) {
+		if (isFocusingOnCard && focusedCardIndex != i) {
 			focusedCardIndex = i;
-		} else if (isFocusMode && focusedCardIndex == i) {
-			isFocusMode = false;
+		} else if (isFocusingOnCard && focusedCardIndex == i) {
+			isFocusingOnCard = false;
 		} else {
-			isFocusMode = true;
+			isFocusingOnCard = true;
 			focusedCardIndex = i;
 		}
 	}
 
-	$: console.log(isFocusMode);
-
 	// calculating card position
 	const radiusPercent: number = 25;
-	$: xPos = (i: number) => {
+	$: calcXPos = (i: number) => {
 		let percent;
-		if (isFocusMode && focusedCardIndex === i) {
+		if (isFocusingOnCard && focusedCardIndex === i) {
 			return 50;
-		} else if (isFocusMode && i < focusedCardIndex) {
+		} else if (isFocusingOnCard && i < focusedCardIndex) {
 			percent = i / (cards.length - 1);
-		} else if (isFocusMode && i > focusedCardIndex) {
+		} else if (isFocusingOnCard && i > focusedCardIndex) {
 			percent = (i - 1) / (cards.length - 1);
 		} else {
 			percent = i / cards.length;
@@ -62,13 +56,13 @@
 		x = x * radiusPercent + 50;
 		return x;
 	};
-	$: yPos = (i: number) => {
+	$: calcYPos = (i: number) => {
 		let percent = i / cards.length;
-		if (isFocusMode && focusedCardIndex == i) {
+		if (isFocusingOnCard && focusedCardIndex == i) {
 			return 50;
-		} else if (isFocusMode && i < focusedCardIndex) {
+		} else if (isFocusingOnCard && i < focusedCardIndex) {
 			percent = i / (cards.length - 1);
-		} else if (isFocusMode && i > focusedCardIndex) {
+		} else if (isFocusingOnCard && i > focusedCardIndex) {
 			percent = (i - 1) / (cards.length - 1);
 		} else {
 			percent = i / cards.length;
@@ -83,8 +77,8 @@
 {#each cards as card, i (card.id)}
 	<Card
 		{...card}
-		position={[xPos(i), yPos(i)]}
-		isFocus={isFocusMode && focusedCardIndex == i}
+		isFocus={isFocusingOnCard && focusedCardIndex == i}
+		position={{ x: calcXPos(i), y: calcYPos(i) }}
 		on:mouseover
 		on:click={() => updateFocusMode(i)}
 	/>
