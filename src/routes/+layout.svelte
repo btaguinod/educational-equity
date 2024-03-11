@@ -14,12 +14,13 @@
 		<!-- App Bar -->
 		<AppBar shadow="shadow-xl">
 			<svelte:fragment slot="lead">
-				<strong class="text-xl">Educational Equity</strong>
+				<a href="/">
+					<strong class="text-xl">Educational Equity</strong>
+				</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<a class="btn btn-sm hover:variant-soft-primary" href="/"> Home </a>
 				<a class="btn btn-sm hover:variant-soft-primary" href="/theory-of-capital">
-					Theory of Capital
+					Bourdieu's Theory of Capital
 				</a>
 			</svelte:fragment>
 		</AppBar>
