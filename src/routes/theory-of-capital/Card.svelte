@@ -5,8 +5,7 @@
 	export let description: string;
 	export let examples: string;
 	export let position: Position;
-	// TODO: set to false by default
-	export let isFocus: boolean = true;
+	export let isFocus: boolean;
 </script>
 
 <button

@@ -12,7 +12,7 @@
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar shadow="shadow-xl" class="!bg-transparent">
+		<AppBar shadow="shadow-xl">
 			<svelte:fragment slot="lead">
 				<strong class="text-xl">Educational Equity</strong>
 			</svelte:fragment>

@@ -1,29 +1,52 @@
 <script lang="ts">
-	import type { CardInfo, ArrowInfo, Position } from './types';
+	import type { RawCardInfo, CardInfo, RawArrowInfo, ArrowInfo, Position } from './types';
 	import Card from './Card.svelte';
 	import Papa from 'papaparse';
 	import { onMount } from 'svelte';
 	import Arrow from './Arrow.svelte';
+	import { error } from '@sveltejs/kit';
 
 	// retreiving card info
 	// TODO: create type for and arrow info
 	// TODO: move this to server loading
+	// TODO: make this cleaner with defined async functions
+	// TODO: combine arrow definitions if they have multiple examples for one type
 	let cards: CardInfo[] = [];
 	let arrows: ArrowInfo[] = [];
 	onMount(() => {
-		let loadArrowData = () =>
-			Papa.parse<ArrowInfo>('/capital-data/connections.csv', {
+		let loadArrowData = (cardIDToIndex: Map<string, number>) =>
+			Papa.parse<RawArrowInfo>('/capital-data/connections.csv', {
 				complete: (results) => {
-					arrows = results.data;
+					for (let rawArrowInfo of results.data) {
+						let fromCardIndex = cardIDToIndex.get(rawArrowInfo.from);
+						if (fromCardIndex === undefined) {
+							error(500, `id ${rawArrowInfo.from} not found`);
+						}
+						let toCardIndex = cardIDToIndex.get(rawArrowInfo.to);
+						if (toCardIndex === undefined) {
+							error(500, `id ${rawArrowInfo.to} not found`);
+						}
+						let newArrowInfo: ArrowInfo = {
+							fromCardIndex,
+							toCardIndex,
+							example: rawArrowInfo.example
+						};
+						arrows = [...arrows, newArrowInfo];
+					}
 				},
 				download: true,
 				dynamicTyping: true,
 				header: true
 			});
-		Papa.parse<CardInfo>('/capital-data/definitions.csv', {
+		Papa.parse<RawCardInfo>('/capital-data/definitions.csv', {
 			complete: (results) => {
+				let cardIDToIndex: Map<string, number> = new Map();
+				for (let i = 0; i < results.data.length; i++) {
+					cardIDToIndex.set(results.data[i].id, i);
+				}
 				cards = results.data;
-				loadArrowData();
+
+				loadArrowData(cardIDToIndex);
 			},
 			download: true,
 			dynamicTyping: true,
@@ -31,81 +54,57 @@
 		});
 	});
 
-	$: console.table(arrows);
-
 	let focusedCardIndex: number = -1;
-	$: isFocusingOnCard = focusedCardIndex !== -1;
+	$: isFocusingOnACard = focusedCardIndex !== -1;
 	function focusOnCard(i: number) {
-		if (isFocusingOnCard && focusedCardIndex != i) {
+		if (isFocusingOnACard && focusedCardIndex != i) {
 			focusedCardIndex = i;
-		} else if (isFocusingOnCard && focusedCardIndex == i) {
-			isFocusingOnCard = false;
+		} else if (isFocusingOnACard && focusedCardIndex == i) {
+			isFocusingOnACard = false;
 		} else {
-			isFocusingOnCard = true;
+			isFocusingOnACard = true;
 			focusedCardIndex = i;
 		}
 	}
 
-	// calculating card position
+	// calculating card position declaratively
+	// TODO: find a way to cache this?
 	const RADIUS_PERCENT: number = 25;
-	$: calcCardXPos = (i: number) => {
-		let percent;
-		if (isFocusingOnCard && focusedCardIndex === i) {
-			return 50;
-		} else if (isFocusingOnCard && i < focusedCardIndex) {
-			percent = i / (cards.length - 1);
-		} else if (isFocusingOnCard && i > focusedCardIndex) {
-			percent = (i - 1) / (cards.length - 1);
-		} else {
-			percent = i / cards.length;
-		}
-		let angle = percent * 2 * Math.PI;
-		let x = Math.cos(angle);
-		x = x * RADIUS_PERCENT + 50;
-		return x;
-	};
-	$: calcCardYPos = (i: number) => {
+	$: getCardPos = (i: number): Position => {
 		let percent = i / cards.length;
-		if (isFocusingOnCard && focusedCardIndex == i) {
-			return 50;
-		} else if (isFocusingOnCard && i < focusedCardIndex) {
+		if (isFocusingOnACard && focusedCardIndex == i) {
+			return { x: 50, y: 50 };
+		} else if (isFocusingOnACard && i < focusedCardIndex) {
 			percent = i / (cards.length - 1);
-		} else if (isFocusingOnCard && i > focusedCardIndex) {
+		} else if (isFocusingOnACard && i > focusedCardIndex) {
 			percent = (i - 1) / (cards.length - 1);
 		} else {
 			percent = i / cards.length;
 		}
 		let angle = percent * 2 * Math.PI;
-		let y = Math.sin(angle);
-		y = y * RADIUS_PERCENT + 50;
-		return y;
+
+		return {
+			x: Math.cos(angle) * RADIUS_PERCENT + 50,
+			y: Math.sin(angle) * RADIUS_PERCENT + 50
+		};
 	};
 
-	// TODO: this is very inefficient
-	$: cardIDToIndex = (id: string) => {
-		return cards.findIndex((cardInfo) => cardInfo.id == id);
-	};
+	$: console.log(arrows);
 </script>
 
 <div class="h-full relative">
-	{#each cards as card, i (card.id)}
+	{#each cards as cardInfo, i (cardInfo.title)}
 		<Card
-			{...card}
-			position={{ x: calcCardXPos(i), y: calcCardYPos(i) }}
-			isFocus={isFocusingOnCard && focusedCardIndex == i}
+			{...cardInfo}
+			position={getCardPos(i)}
+			isFocus={focusedCardIndex == i}
 			on:click={() => focusOnCard(i)}
 		/>
 	{/each}
-	{#each arrows as arrow}
+	{#each arrows as arrow (arrow.example)}
 		<Arrow
-			fromPosition={{
-				x: calcCardXPos(cardIDToIndex(arrow.from)),
-				y: calcCardYPos(cardIDToIndex(arrow.from))
-			}}
-			toPosition={{
-				x: calcCardXPos(cardIDToIndex(arrow.to)),
-				y: calcCardYPos(cardIDToIndex(arrow.to))
-			}}
+			fromPosition={getCardPos(arrow.fromCardIndex)}
+			toPosition={getCardPos(arrow.toCardIndex)}
 		/>
 	{/each}
 </div>
