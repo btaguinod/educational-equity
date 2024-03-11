@@ -1,11 +1,15 @@
 <script lang="ts">
-	export let x1: number;
-	export let y1: number;
-	export let x2: number;
-	export let y2: number;
+	import { onMount } from 'svelte';
+	import type { Position } from './types';
+
+	export let fromPosition: Position;
+	export let toPosition: Position;
+	onMount(() => {
+		console.log(fromPosition);
+	});
 </script>
 
-<svg class="fill-token">
+<svg class="fill-token absolute -z-10" height="100%" width="100%">
 	<defs>
 		<marker id="head" orient="auto" markerWidth="4" markerHeight="6" refX="1" refY="3">
 			<path
@@ -18,13 +22,16 @@
 		</marker>
 	</defs>
 
-	<path
+	<line
 		id="arrow-line"
 		class="stroke-surface-900"
 		marker-start="url(#head)"
 		stroke-width="4"
 		fill="none"
 		stroke-linecap="round"
-		d="M {x2},{y2} {x1},{y1}"
+		x1="{toPosition.x}%"
+		y1="{toPosition.y}%"
+		x2="{fromPosition.x}%"
+		y2="{fromPosition.y}%"
 	/>
 </svg>

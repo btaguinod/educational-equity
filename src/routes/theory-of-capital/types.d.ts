@@ -3,7 +3,6 @@ export interface CardInfo {
     title: string,
     description: string,
     examples: string,
-    position: Position
 }
 
 export interface ArrowInfo {

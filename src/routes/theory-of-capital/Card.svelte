@@ -10,13 +10,13 @@
 </script>
 
 <button
-	class="card card-hover variant-filled-surface p-4 absolute -translate-x-1/2 translate-y-1/2 text-left font-thin appearance-none"
-	style="left:{position.x}%;bottom:{position.y}%"
+	class="card card-hover variant-filled-surface p-4 absolute -translate-x-1/2 -translate-y-1/2 text-left font-thin appearance-none"
+	style="left:{position.x}%;top:{position.y}%"
 	on:click
 >
-	<div class="text-xl font-bold">{title}</div>
+	<p class="text-xl font-bold">{title}</p>
 	{#if isFocus}
-		<div class="font-normal">{description}</div>
-		<div class="font-bold"><strong>Examples: {examples}</strong></div>
+		<p class="font-normal">{description}</p>
+		<p class="font-bold">Examples: {examples}</p>
 	{/if}
 </button>
