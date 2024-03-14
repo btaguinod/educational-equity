@@ -11,6 +11,8 @@
 	// TODO: move this to server loading
 	// TODO: make this cleaner with defined async functions
 	// TODO: combine arrow definitions if they have multiple examples for one type
+	// TODO: consider using a store?, there are a ton of components that share state: https://www.reddit.com/r/sveltejs/comments/10rzap6/when_to_use_stores_vs_props_bubbling_up/
+	// this is helpful too https://joyofcode.xyz/svelte-state-management, should probabl yuse module context
 	let cards: CardInfo[] = [];
 	let arrows: ArrowInfo[] = [];
 	onMount(() => {
@@ -55,31 +57,30 @@
 	});
 
 	let focusedCardIndex: number = -1;
-	$: isFocusingOnACard = focusedCardIndex !== -1;
 	function focusOnCard(i: number) {
-		if (isFocusingOnACard && focusedCardIndex != i) {
+		if (focusedCardIndex != i) {
 			focusedCardIndex = i;
-		} else if (isFocusingOnACard && focusedCardIndex == i) {
-			isFocusingOnACard = false;
+		} else if (focusedCardIndex == i) {
+			focusedCardIndex = -1;
 		} else {
-			isFocusingOnACard = true;
 			focusedCardIndex = i;
 		}
 	}
 
 	// calculating card position declaratively
-	// TODO: find a way to cache this?
+	// TODO: find a way to cache this? It's being called by both the cards and the arrow
+	// the alternate way is to have a state that I update in multiple places, and I'm not sure if I want that
 	const RADIUS_PERCENT: number = 25;
-	$: getCardPos = (i: number): Position => {
-		let percent = i / cards.length;
-		if (isFocusingOnACard && focusedCardIndex == i) {
+	$: getCardPos = (cardIndex: number): Position => {
+		let percent = cardIndex / cards.length;
+		if (focusedCardIndex == cardIndex) {
 			return { x: 50, y: 50 };
-		} else if (isFocusingOnACard && i < focusedCardIndex) {
-			percent = i / (cards.length - 1);
-		} else if (isFocusingOnACard && i > focusedCardIndex) {
-			percent = (i - 1) / (cards.length - 1);
+		} else if (focusedCardIndex != -1 && cardIndex < focusedCardIndex) {
+			percent = cardIndex / (cards.length - 1);
+		} else if (focusedCardIndex != -1 && cardIndex > focusedCardIndex) {
+			percent = (cardIndex - 1) / (cards.length - 1);
 		} else {
-			percent = i / cards.length;
+			percent = cardIndex / cards.length;
 		}
 		let angle = percent * 2 * Math.PI;
 
