@@ -91,7 +91,7 @@
 	};
 </script>
 
-<div class="h-full relative">
+<div class="h-full relative" style="container-type: size">
 	{#each cards as cardInfo, i (cardInfo.title)}
 		<Card
 			{...cardInfo}

@@ -9,8 +9,8 @@
 </script>
 
 <button
-	class="card card-hover variant-filled-surface p-4 absolute -translate-x-1/2 -translate-y-1/2 text-left font-thin appearance-none"
-	style="left:{position.x}%;top:{position.y}%"
+	class="card card-hover variant-filled-surface p-4 absolute text-left font-thin appearance-none"
+	style="transform: translate(calc({position.x}cqw - 50%),calc({position.y}cqh - 50%));"
 	on:click
 >
 	<p class="text-xl font-bold">{title}</p>
