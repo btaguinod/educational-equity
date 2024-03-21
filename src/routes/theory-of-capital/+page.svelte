@@ -14,7 +14,9 @@
 	// TODO: consider using a store?, there are a ton of components that share state: https://www.reddit.com/r/sveltejs/comments/10rzap6/when_to_use_stores_vs_props_bubbling_up/
 	// this is helpful too https://joyofcode.xyz/svelte-state-management, should probabl yuse module context
 	let cards: CardInfo[] = [];
+	$: cardPositions = cards.map((_, i) => getCardPos(i));
 	let arrows: ArrowInfo[] = [];
+
 	onMount(() => {
 		let loadArrowData = (cardIDToIndex: Map<string, number>) =>
 			Papa.parse<RawArrowInfo>('/capital-data/connections.csv', {
@@ -67,9 +69,7 @@
 		}
 	}
 
-	// calculating card position declaratively
-	// TODO: find a way to cache this? It's being called by both the cards and the arrow
-	// the alternate way is to have a state that I update in multiple places, and I'm not sure if I want that
+	// calculatcalculateing card position declaratively
 	const RADIUS_PERCENT: number = 25;
 	$: getCardPos = (cardIndex: number): Position => {
 		let percent = cardIndex / cards.length;
@@ -89,23 +89,21 @@
 			y: Math.sin(angle) * RADIUS_PERCENT + 50
 		};
 	};
-
-	$: console.log(arrows);
 </script>
 
 <div class="h-full relative">
 	{#each cards as cardInfo, i (cardInfo.title)}
 		<Card
 			{...cardInfo}
-			position={getCardPos(i)}
+			position={cardPositions[i]}
 			isFocus={focusedCardIndex == i}
 			on:click={() => focusOnCard(i)}
 		/>
 	{/each}
 	{#each arrows as arrow (arrow.example)}
 		<Arrow
-			fromPosition={getCardPos(arrow.fromCardIndex)}
-			toPosition={getCardPos(arrow.toCardIndex)}
+			fromPosition={cardPositions[arrow.fromCardIndex]}
+			toPosition={cardPositions[arrow.toCardIndex]}
 		/>
 	{/each}
 </div>

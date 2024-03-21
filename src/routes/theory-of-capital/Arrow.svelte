@@ -4,9 +4,6 @@
 
 	export let fromPosition: Position;
 	export let toPosition: Position;
-	onMount(() => {
-		console.log(fromPosition);
-	});
 </script>
 
 <svg class="fill-token absolute -z-10" height="100%" width="100%">
