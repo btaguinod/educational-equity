@@ -92,18 +92,26 @@
 </script>
 
 <div class="h-full relative" style="container-type: size">
-	{#each cards as cardInfo, i (cardInfo.title)}
+	<!-- {#each cards as cardInfo, i (cardInfo.title)}
 		<Card
 			{...cardInfo}
 			position={cardPositions[i]}
 			isFocus={focusedCardIndex == i}
 			on:click={() => focusOnCard(i)}
 		/>
+	{/each} -->
+	{#each arrows as arrow, i (arrow.example)}
+		{#if i == 0}
+			<Arrow
+				fromPosition={cardPositions[arrow.fromCardIndex]}
+				toPosition={cardPositions[arrow.toCardIndex]}
+			/>
+		{/if}
 	{/each}
-	{#each arrows as arrow (arrow.example)}
+	<!-- {#each arrows as arrow (arrow.example)}
 		<Arrow
 			fromPosition={cardPositions[arrow.fromCardIndex]}
 			toPosition={cardPositions[arrow.toCardIndex]}
 		/>
-	{/each}
+	{/each} -->
 </div>
