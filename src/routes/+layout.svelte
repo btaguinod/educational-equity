@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, popup } from '@skeletonlabs/skeleton';
+	import '@fortawesome/fontawesome-free/css/fontawesome.css';
+	import '@fortawesome/fontawesome-free/css/solid.css';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
@@ -12,16 +14,48 @@
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar shadow="shadow-xl">
+		<AppBar
+			shadow="shadow-xl"
+			gridColumns="grid-cols-3"
+			slotDefault="place-self-center"
+			slotTrail="place-content-end"
+		>
 			<svelte:fragment slot="lead">
 				<a href="/">
-					<strong class="text-xl">Educational Equity</strong>
+					<div class="text-xl font-black">Ed Equity Info Center</div>
 				</a>
 			</svelte:fragment>
+			<div class="relative hidden lg:block btn-group variant-soft">
+				<button class="hover:variant-soft-primary" use:popup={{ event: 'click', target: 'theory' }}>
+					<span>Theory</span>
+					<i class="fa-solid fa-caret-down opacity-50" />
+				</button>
+				<button
+					class="hover:variant-soft-primary"
+					use:popup={{ event: 'click', target: 'application' }}
+				>
+					<span>Application</span>
+					<i class="fa-solid fa-caret-down opacity-50" />
+				</button>
+			</div>
+			<div class="card p-4 w-60 shadown-xl" data-popup="theory">
+				<nav class="list-nav">
+					<ul>
+						<li>
+							<a class="flex-auto" href="/theory-of-capital"> Bourdieu's Theory of Capital </a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<div class="card p-4 w-60 shadown-xl" data-popup="application">
+				<nav class="list-nav">
+					<ul>
+						<li>Coming Soon!</li>
+					</ul>
+				</nav>
+			</div>
 			<svelte:fragment slot="trail">
-				<a class="btn btn-sm hover:variant-soft-primary" href="/theory-of-capital">
-					Bourdieu's Theory of Capital
-				</a>
+				<a class="btn hover:variant-soft-primary" href="/theory-of-capital"> About </a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
