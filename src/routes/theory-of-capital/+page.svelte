@@ -69,7 +69,7 @@
 	}
 
 	// calculatcalculateing card position declaratively
-	const RADIUS_PERCENT: number = 25;
+	const RADIUS_PERCENT: number = 20;
 	$: getCardPos = (cardIndex: number): Position => {
 		let percent = cardIndex / cards.length;
 		if (focusedCardIndex == cardIndex) {
