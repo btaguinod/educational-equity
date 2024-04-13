@@ -91,6 +91,7 @@
 </script>
 
 <div class="h-full relative" style="container-type: size">
+	<h2 class="p-4 h2 absolute">Bourdieu's Theory of Capital</h2>
 	{#each cards as cardInfo, i (cardInfo.title)}
 		<Card
 			{...cardInfo}
