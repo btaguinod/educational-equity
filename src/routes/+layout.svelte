@@ -25,41 +25,42 @@
 					<div class="text-xl font-black">Ed Equity Info Center</div>
 				</a>
 			</svelte:fragment>
-			<div class="relative hidden lg:block btn-group variant-soft">
-				<button class="hover:variant-soft-primary" use:popup={{ event: 'click', target: 'theory' }}>
-					<span>Theory</span>
-					<i class="fa-solid fa-caret-down opacity-50" />
-				</button>
-				<button
-					class="hover:variant-soft-primary"
-					use:popup={{ event: 'click', target: 'application' }}
-				>
-					<span>Application</span>
-					<i class="fa-solid fa-caret-down opacity-50" />
-				</button>
-			</div>
-			<div class="card p-4 w-60 shadown-xl" data-popup="theory">
-				<nav class="list-nav">
-					<ul>
-						<li>
-							<a class="flex-auto" href="/theory/bourdieus-theory-of-capital">
-								Bourdieu's Theory of Capital
-							</a>
-						</li>
-					</ul>
-				</nav>
-			</div>
-			<div class="card p-4 w-60 shadown-xl" data-popup="application">
-				<nav class="list-nav">
-					<ul>
-						<li>Coming Soon!</li>
-					</ul>
-				</nav>
-			</div>
 			<svelte:fragment slot="trail">
-				<a class="btn hover:variant-soft-primary" href="/theory/bourdieus-theory-of-capital">
-					About
-				</a>
+				<div class="relative hidden lg:block btn-group variant-soft">
+					<button
+						class="hover:variant-soft-primary"
+						use:popup={{ event: 'click', target: 'theory' }}
+					>
+						<span>Theory</span>
+						<i class="fa-solid fa-caret-down opacity-50" />
+					</button>
+					<button
+						class="hover:variant-soft-primary"
+						use:popup={{ event: 'click', target: 'application' }}
+					>
+						<span>Application</span>
+						<i class="fa-solid fa-caret-down opacity-50" />
+					</button>
+				</div>
+				<div class="card p-4 w-60 shadown-xl" data-popup="theory">
+					<nav class="list-nav">
+						<ul>
+							<li>
+								<a class="flex-auto" href="/theory/bourdieus-theory-of-capital">
+									Bourdieu's Theory of Capital
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+				<div class="card p-4 w-60 shadown-xl" data-popup="application">
+					<nav class="list-nav">
+						<ul>
+							<li>Coming Soon!</li>
+						</ul>
+					</nav>
+				</div>
+				<a class="btn hover:variant-soft-primary" href="/"> About </a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
