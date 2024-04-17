@@ -42,7 +42,9 @@
 				<nav class="list-nav">
 					<ul>
 						<li>
-							<a class="flex-auto" href="/theory-of-capital"> Bourdieu's Theory of Capital </a>
+							<a class="flex-auto" href="/theory/bourdieus-theory-of-capital">
+								Bourdieu's Theory of Capital
+							</a>
 						</li>
 					</ul>
 				</nav>
@@ -55,7 +57,9 @@
 				</nav>
 			</div>
 			<svelte:fragment slot="trail">
-				<a class="btn hover:variant-soft-primary" href="/theory-of-capital"> About </a>
+				<a class="btn hover:variant-soft-primary" href="/theory/bourdieus-theory-of-capital">
+					About
+				</a>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
