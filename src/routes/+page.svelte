@@ -1,8 +1,6 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
-
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="space-y-10 text-center flex flex-col items-center">
-		<h2 class="h2">Learn about educational equity!</h2>
+		<h2 class="h2">Everything you need to know about the US education system!</h2>
 		<!-- Animated Logo -->
 		<figure>
 			<section class="img-bg" />

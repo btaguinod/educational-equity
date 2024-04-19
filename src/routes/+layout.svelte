@@ -22,7 +22,7 @@
 		>
 			<svelte:fragment slot="lead">
 				<a href="/">
-					<div class="text-xl font-black">Ed Equity Info Center</div>
+					<div class="text-xl font-black">Educational Equity Info Center</div>
 				</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">

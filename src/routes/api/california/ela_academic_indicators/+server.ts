@@ -4,7 +4,7 @@ import { supabase } from '$lib/supabaseClient'
 
 // TODO: make upsert merge instead of error
 // TODO: create table if it doesn't exist
-export async function GET() {
+export async function POST() {
     console.log('Fetching sheet')
     let result = await fetch('https://www3.cde.ca.gov/researchfiles/cadashboard/eladownload2023.xlsx')
     console.log('Reading results')
@@ -20,6 +20,7 @@ export async function GET() {
         const { error } = await supabase
             .from('ela_academic_indicators')
             .upsert(array_split)
+
         if (error != null) {
             console.error(error.message)
             return json({ 'status': 500, 'error': error.message })
