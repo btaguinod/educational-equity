@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { error } from '@sveltejs/kit';
 
+	// TODO: omptimize for server loading
 	// retreiving card info
 	// TODO: create type for and arrow info
 	// TODO: move this to server loading
