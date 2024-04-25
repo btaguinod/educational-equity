@@ -56,7 +56,11 @@
 				<div class="card p-4 w-60 shadown-xl" data-popup="application">
 					<nav class="list-nav">
 						<ul>
-							<li>Coming Soon!</li>
+							<li>
+								<a class="flex-auto" href="/application/high-school-data-chart">
+									High School Data Chart
+								</a>
+							</li>
 						</ul>
 					</nav>
 				</div>

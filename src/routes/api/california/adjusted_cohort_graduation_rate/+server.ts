@@ -34,7 +34,7 @@ export async function GET() {
 			allData.push({
 				...data[i],
 				regular_hs_diploma_graduates_rate:
-					Math.round((regularHsDiplomaGraduates * 100.0) / cohortStudents) / 100
+					Math.round((regularHsDiplomaGraduates * 1000.0) / cohortStudents) / 1000
 			});
 		}
 		if (data.length < 1000) {

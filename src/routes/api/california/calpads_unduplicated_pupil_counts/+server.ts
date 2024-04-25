@@ -30,7 +30,7 @@ export async function GET() {
 			allData.push({
 				...data[i],
 				free_reduced_meal_program_rate:
-					Math.round((freeReducedMealProgarm * 100.0) / totalEnrollment) / 100
+					Math.round((freeReducedMealProgarm * 1000.0) / totalEnrollment) / 1000
 			});
 		}
 		if (data.length < 1000) {
