@@ -39,6 +39,7 @@ type AdjustedCohortGraduationRateRaw = {
 	'Still Enrolled (Rate)': string;
 };
 
+// TODO: incorporate rate into supabase
 export async function POST() {
 	console.log('Handling request to retrieve and store data');
 	try {
